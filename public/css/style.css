@@ -1,0 +1,133 @@
+.navbar{
+    height : 5rem;
+    background-color: white;
+}
+
+body{
+    display:flex;
+    flex-direction: column;
+    min-height : 100vh;
+}
+
+.container{
+    flex:1;
+}
+
+.fa-otter{
+    color: #fe424d;
+    font-size  :2rem;
+
+}
+
+.navlink{
+    color : #222222 !important;
+}
+
+
+.container{
+    margin-top: 5.5rem !important;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color : #222222;
+    margin-right  : 0.75rem;
+    
+}
+
+.f-info-links a:hover{
+    text-decoration : underline;
+    
+
+}
+
+.f-info{
+    text-align: center;
+    height:6rem;
+    background-color: #ebebeb;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space-evenly;
+    letter-spacing: 1.2px;
+}
+
+.f-info-socials{
+    width : 100%;
+    font-size: 1.2rem;
+}
+
+
+
+.f-info-links { 
+    width : 100%;
+}
+
+.f-info-socials i{
+    margin-right: 1rem ;
+}
+
+
+/* Card */
+
+.listing-card{
+    border : 0px !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top { 
+
+    border-radius: 1rem !important;
+    width  :100%;
+    object-fit: cover !important;
+}
+
+
+.card-body { 
+    padding: 0 !important;
+}
+
+.card-text p{
+    font-weight: 400;
+}
+
+.listing-link{
+    text-decoration: none;
+}
+
+.card-img-overlay{
+    opacity : 0;
+}
+
+.card-img-overlay:hover{
+    opacity : 0.3;
+    background-color: #ebebeb;
+}
+.my-btn{
+    background-color : #fe424d !important;
+    border  :0px !important;
+}
+
+.show-btns{
+    display:flex;
+    width:60%;
+    margin: auto;
+    margin-top:0px;
+
+    
+}
+
+.show-card{
+    margin-bottom:0px !important;
+}
+
+#map {
+    height: 400px;
+    width: 100%;
+}
+
+
+.listing-link {
+    color: inherit !important;
+    text-decoration: none !important;
+}

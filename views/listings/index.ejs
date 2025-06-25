@@ -1,0 +1,139 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+    
+    .options {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .filter {
+        text-align: center;
+        opacity: 0.7;
+        cursor: pointer;
+    }
+
+    .filter:hover {
+        opacity: 1;
+    }
+
+    .filter p {
+        font-size: 0.8rem;
+        margin-top: 0.3rem;
+    }
+
+    .tax-info {
+        display: none;
+    }
+
+    .tax-toggle {
+        font-size: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 2rem;
+        padding: 0.75rem 1rem;
+        margin: 10px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .options a {
+        text-decoration: none;
+        color: inherit;
+        display: inline-block;
+    }
+
+    .listing-card {
+        border: none !important;
+        margin-bottom: 2rem;
+    }
+
+    .card-img-top {
+        border-radius: 1rem !important;
+        width: 100%;
+        height: 20rem;
+        object-fit: cover;
+    }
+
+    .card-body {
+        padding: 0 !important;
+    }
+
+    .listing-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    @media (max-width: 576px) {
+        .card-img-top {
+            height: 14rem;
+        }
+
+        .tax-toggle {
+            font-size: 0.7rem;
+            padding: 0.5rem 0.8rem;
+        }
+
+        .filter p {
+            font-size: 0.7rem;
+        }
+    }
+</style>
+
+
+<div class="container">
+    <div id="filters" class="row justify-content-between align-items-center">
+        <div class="options col-12 col-md-10">
+            <% const categories = ["Beachfront", "Cabin", "City", "Mountain", "Castle", "Villa", "Treehouse", "Historic House", "Chalet"]; %>
+            <% const icons = ["fa-fire", "fa-bed", "fa-mountain-city", "fa-mountain-sun", "fa-chess-rook", "fa-person-swimming", "fa-tents", "fa-cow", "fa-snowman"]; %>
+            <% for (let i = 0; i < categories.length; i++) { %>
+                <a href="/listings?category=<%= categories[i] %>">
+                    <div class="filter">
+                        <div><i class="fa-solid <%= icons[i] %> fa-lg"></i></div>
+                        <p><%= categories[i] %></p>
+                    </div>
+                </a>
+            <% } %>
+        </div>
+
+        <div class="tax-toggle col-12 col-md-2 mt-3 mt-md-0">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Display Total Taxes</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-1 g-4">
+        <% for(let listings of allListings){ %>
+            <div class="col">
+                <a href="/listings/<%= listings.id %>" class="listing-link">
+                    <div class="card listing-card h-100">
+                        <img src="<%= listings.image.url %>" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text">
+                                <b><%= listings.title %></b><br>
+                                ₹ <%= listings.price ? Number(listings.price).toLocaleString('en-IN') : "0" %> / night
+                                <span class="tax-info">&nbsp;&nbsp;18% GST</span>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.getElementById("flexSwitchCheckDefault").addEventListener("change", () => {
+        let infos = document.getElementsByClassName("tax-info");
+        for (let info of infos) {
+            info.style.display = (info.style.display === "inline") ? "none" : "inline";
+        }
+    });
+</script>

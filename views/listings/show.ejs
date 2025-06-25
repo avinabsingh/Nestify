@@ -1,0 +1,133 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container my-4">
+  <div class="row">
+    <div class="col-12 col-md-8 offset-md-2">
+      <div class="listing-card show-card">
+        <h1 class="mt-2 mb-3 text-center"><%= pl.title %></h1>
+        <img src="<%= pl.image.url %>" class="card-img-top mb-3" alt="..." style="width: 100%; max-height: 40vh; object-fit: cover;">
+        <div class="card-body">
+          <p class="card-text"><i><b>Owned by <%= pl.owner.username %></b></i></p>
+          <p class="card-text"><%= pl.description %></p>
+          <p class="card-text fw-bold">&#8377; <%= pl.price.toLocaleString('en-IN') %></p>
+          <p class="card-text text-muted"><%= pl.location %>, <%= pl.country %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if (curUser && curUser._id.equals(pl.owner._id)) { %>
+    <div class="row justify-content-center my-3">
+      <div class="col-6 d-flex justify-content-between">
+        <form method="GET" action="/listings/<%= pl._id %>/edit">
+          <button class="btn btn-danger">Edit</button>
+        </form>
+        <form method="POST" action="/listings/<%= pl._id %>?_method=DELETE">
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (curUser) { %>
+    <div class="row justify-content-center mt-4">
+      <div class="col-12 col-md-8">
+        <h4>Leave a Review</h4>
+        <form method="POST" action="/listings/<%= pl._id %>/reviews" class="needs-validation" novalidate>
+          
+          <div class="mb-3">
+            <label for="rating" class="form-label">Rating</label>
+            <fieldset class="starability-slot">
+              <legend>Rate:</legend>
+              <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="rating" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="rating" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="rating" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="rating" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="rating" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+          </div>
+
+        
+          <div class="mb-3">
+            <label for="comment" class="form-label">Comment</label>
+            <textarea id="comment" name="comment" rows="4" class="form-control" required></textarea>
+            <div class="valid-feedback">Comment looks good.</div>
+            <div class="invalid-feedback">Please enter a comment.</div>
+          </div>
+
+          <div class="d-grid">
+            <button class="btn btn-outline-dark">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  <% } %>
+
+  <hr class="my-4" />
+
+  
+  <h4 class="text-center mb-3">All Reviews</h4>
+  <div class="row justify-content-center">
+    <% for (review of pl.reviews) { %>
+      <div class="col-12 col-md-5 col-lg-4 mb-3 mx-2">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= review.author.username %></h5>
+            <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+            <p class="card-text"><%= review.comment %></p>
+          </div>
+          <form method="POST" action="/listings/<%= pl._id %>/reviews/<%= review._id %>?_method=DELETE" class="m-2">
+            <button class="btn btn-sm btn-dark">Delete</button>
+          </form>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  
+  <div class="row mt-5">
+    <div class="col-12">
+      <h4 class="text-center">Where you'll be</h4>
+      <div id="map" style="height: 500px; width: 100%; border: 1px solid #ccc; border-radius: 1rem;"></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  function geocodeAddress() {
+    var address = "<%= pl.location %>, <%= pl.country %>";
+    if (!address.trim()) return alert("Address is empty!");
+
+    var url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.length) return alert("Address not found.");
+
+        var lat = data[0].lat;
+        var lon = data[0].lon;
+        var map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map)
+          .bindPopup(`<b>Address:</b> ${address}`)
+          .openPopup();
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Error fetching map data.");
+      });
+  }
+
+  window.onload = geocodeAddress;
+</script>
