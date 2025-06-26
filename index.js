@@ -112,12 +112,6 @@ app.use((req,res,next)=>{
 })
 
 
-// pbkdf2
-app.get("/",async (req,res)=>{
-    let allListings =   await Listings.find();
-    res.render("listings/index.ejs",{allListings});
-})
-
 app.get("/listings/destinations",async (req,res)=>{
     let {destination} = req.query;
     console.log(destination);
@@ -130,6 +124,14 @@ app.get("/listings/destinations",async (req,res)=>{
 
     res.render("listings/index.ejs", { allListings: listings });
 })
+
+// pbkdf2
+app.get("/",async (req,res)=>{
+    let allListings =   await Listings.find();
+    res.render("listings/index.ejs",{allListings});
+})
+
+
 
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",review);

@@ -34,6 +34,7 @@ module.exports.createNew = async (req,res,next)=>{
             location : req.body.location,
             price : req.body.price,
             category : req.body.category,
+            country : req.body.country,
             
         });
         listing1.image = {url,filename};
